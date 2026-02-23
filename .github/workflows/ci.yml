@@ -19,8 +19,14 @@ jobs:
           cache: 'gradle'
           distribution: 'temurin'
 
+      - name: setup gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: wrapper
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
       - name: grant permission
         run: chmod +x gradlew
-        
+
       - name: build and run tests
         run: ./gradlew clean test jacocoTestReport
