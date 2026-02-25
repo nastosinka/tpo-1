@@ -16,9 +16,9 @@ public class Secant {
     }
 
     public static double run(double x, int n) {
-
-        if (Math.abs(x) >= Math.PI / 2) {
-            return Double.NaN;
+        x = x % (2 * Math.PI);
+        if (x < 0) {
+            x += 2 * Math.PI;
         }
 
         double cosValue = cos(x, n);
