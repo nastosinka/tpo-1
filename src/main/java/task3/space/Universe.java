@@ -2,9 +2,7 @@ package task3.space;
 
 import lombok.Getter;
 import lombok.Setter;
-import task3.types.StarType;
 
-import java.util.List;
 
 @Getter
 @Setter
@@ -20,12 +18,22 @@ public class Universe extends SpaceSystem {
     }
 
     public Planet findPlanet(String name) {
-        return getChildren().stream()
-                .filter(obj -> obj instanceof Planet)
-                .map(obj -> (Planet) obj)
-                .filter(p -> p.getName().equals(name))
-                .findFirst()
-                .orElse(null);
+        return findPlanetRecursive(this, name);
+    }
+
+    private Planet findPlanetRecursive(SpaceObject obj, String name) {
+        if (obj instanceof Planet && name.equals(((Planet) obj).getName())) {
+            return (Planet) obj;
+        }
+
+        for (SpaceObject child : obj.getChildren()) {
+            Planet found = findPlanetRecursive(child, name);
+            if (found != null) {
+                return found;
+            }
+        }
+
+        return null;
     }
 
 }

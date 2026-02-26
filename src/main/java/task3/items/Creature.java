@@ -18,6 +18,11 @@ public class Creature extends Item {
         } else if (deathType == DeathType.SURPRISE) {
             System.out.println("Он умер от удивления.");
         }
+        else {
+            throw new IllegalArgumentException("Не передана причина смерти");
+        }
+        this.isAlive = false;
+        this.deathType = deathType;
     }
 
 }
