@@ -57,8 +57,9 @@ public class GraphBFSTest {
 
     @Test
     @DisplayName("BFS: Граф без ребер")
-    void testBFS_emptyGraph() {
+    void testBFS_noEdgesGraph() {
         GraphBFS graph = new GraphBFS();
+        graph.addVertex(1);
 
         List<Integer> expectedOrder = Arrays.asList(1);
 
@@ -66,4 +67,44 @@ public class GraphBFSTest {
 
         assertEquals(expectedOrder, actualOrder, "Все вершины посещены");
     }
+
+    @Test
+    @DisplayName("BFS: пустой граф")
+    void testBFS_emptyGraph() {
+        GraphBFS graph = new GraphBFS();
+        assertThrows(IllegalArgumentException.class, () -> {
+            graph.bfs(1);
+        }, "Для несуществующей вершины будет выброшено исключение");
+    }
+
+    @Test
+    @DisplayName("BFS: при обходе графа вершины обходятся по уровням")
+    void testBfsWithBranching() {
+        GraphBFS graph = new GraphBFS();
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(2, 4);
+        graph.addEdge(3, 4);
+
+        List<Integer> result = graph.bfs(1);
+
+        assertEquals(1, result.get(0));
+        assertTrue(result.get(1) == 2 || result.get(1) == 3);
+        assertTrue(result.get(2) == 2 || result.get(2) == 3);
+        assertEquals(4, result.get(3));
+    }
+
+    @Test
+    @DisplayName("BFS: обход графа корректно обрабатывает дублирующиеся ребра")
+    void testBfsWithMultipleEdgesToSameVertex() {
+        GraphBFS graph = new GraphBFS();
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 2);
+
+        List<Integer> result = graph.bfs(1);
+
+        assertEquals(List.of(1, 2), result);
+    }
+
+
 }
