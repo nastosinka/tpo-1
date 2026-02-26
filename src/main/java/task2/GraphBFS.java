@@ -5,9 +5,16 @@ import java.util.*;
 public class GraphBFS {
 
     private final Map<Integer, List<Integer>> adjList = new HashMap<>();
+    private final Set<Integer> vertices = new HashSet<>();
 
     public void addEdge(int from, int to) {
         adjList.computeIfAbsent(from, k -> new ArrayList<>()).add(to);
+        vertices.add(from);
+        vertices.add(to);
+    }
+
+    public void addVertex(int v) {
+        vertices.add(v);
     }
 
     /**
@@ -16,6 +23,9 @@ public class GraphBFS {
      * @return список вершин в порядке обхода
      */
     public List<Integer> bfs(int start) {
+        if (!hasVertex(start)) {
+            throw new IllegalArgumentException("Вершина " + start + " не существует в графе");
+        }
         List<Integer> visitedOrder = new ArrayList<>();
         Set<Integer> visited = new HashSet<>();
         Queue<Integer> queue = new LinkedList<>();
@@ -37,5 +47,9 @@ public class GraphBFS {
         }
 
         return visitedOrder;
+    }
+
+    public boolean hasVertex(int vertex) {
+        return vertices.contains(vertex);
     }
 }
